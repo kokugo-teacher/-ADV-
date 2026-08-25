@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>羅生門 ～生きるための選択～</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    overflow-x:hidden;
+    font-family:"Yu Gothic","Meiryo",sans-serif;
+}
+
+#background{
+    width:100vw;
+    height:100vh;
+
+    background-image:url("title.png");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+}
+
+#titleScreen{
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.75);
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    color:white;
+
+    z-index:9999;
+
+    overflow-y:auto;
+    padding:20px;
+}
+
+#titleScreen h1{
+    font-size:56px;
+    text-shadow:
+    0 0 10px #FFD700,
+    0 0 25px #FFD700;
+    color:#FFD700;
+    margin:0;
+}
+
+#titleScreen h2{
+    margin-bottom:15px;
+}
+
+#startButton{
+    padding:10px 10px;
+    font-size:20px;
+    cursor:pointer;
+    transition:0.3s;
+
+}
+
+#galleryButton,
+#aboutButton{
+
+    padding:10px 20px;
+
+    font-size:20px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+    margin-top:8px;
+
+}
+
+#galleryButton:hover,
+#aboutButton:hover{
+
+    transform:scale(1.05);
+
+    background:#FFD700;
+
+    color:black;
+
+    box-shadow:0 0 20px #FFD700;
+
+}
+
+
+#startButton:hover{
+    transform:scale(1.05);
+    background:#FFD700;
+    color:black;
+    box-shadow:0 0 20px #FFD700;
+}
+
+#titleScreen h1{
+
+    animation: glow 2s infinite alternate;
+
+}
+
+@keyframes glow{
+
+    from{
+
+        text-shadow:
+        0 0 10px #FFD700,
+        0 0 25px #FFD700;
+
+    }
+
+    to{
+
+        text-shadow:
+        0 0 20px #FFD700,
+        0 0 50px #FFD700;
+
+    }
+
+}
+
+#textbox{
+    width:95%;
+    max-width:1300px;
+    margin-bottom:20px;
+    background:rgba(0,0,0,.6);
+    border-radius:12px;
+    padding:20px;
+    display:flex;
+    gap:20px;
+}
+
+#characterArea{
+
+    width:300px;
+
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+}
+
+#character{
+    transition:0.8s;
+    max-height:450px;
+    object-fit:contain;
+}
+
+#messageArea{
+
+    flex:1;
+
+    color:white;
+}
+
+#speaker{
+
+    font-size:28px;
+
+    color:#FFD700;
+
+    margin-bottom:15px;
+}
+
+#text{
+    min-height:80px;
+    max-height:50vh;
+    overflow-y:auto;
+    font-size:30px;
+    line-height:1.8;
+}
+
+#choices{
+
+    margin-top:15px;
+}
+
+.choiceBtn{
+
+    width:100%;
+
+    padding:20px;
+
+    margin-bottom:5px;
+
+    font-size:20px;
+
+    cursor:pointer;
+}
+
+#controls{
+
+    text-align:right;
+}
+
+#nextBtn{
+
+    padding:18px 30px;
+
+    font-size:20px;
+
+    cursor:pointer;
+}
+
+@media screen and (max-width:1200px){
+
+body{
+    overflow:auto;
+}
+
+#background{
+    align-items:flex-start;
+    min-height:100vh;
+    height:auto;
+    overflow-y:auto;
+}
+
+#textbox{
+    width:98%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:15px;
+    margin-top:10px;
+    margin-bottom:40px;
+}
+
+#characterArea{
+    width:100%;
+    display:flex;
+    justify-content:center;
+}
+
+#character{
+    width:90%;
+    max-width:500px;
+    max-height:none;
+}
+
+#messageArea{
+    width:100%;
+}
+
+#speaker{
+    font-size:50px;
+    margin-bottom:20px;
+}
+
+#text{
+    font-size:40px;
+    line-height:1.8;
+    max-height:none;
+}
+
+.choiceBtn{
+    font-size:34px;
+    padding:20px;
+    margin-bottom:12px;
+}
+
+#nextBtn{
+    font-size:34px;
+    padding:18px 28px;
+}
+
+#titleScreen h1{
+    font-size:84px;
+}
+
+#titleScreen h2{
+    font-size:42px;
+}
+
+#startButton,
+#galleryButton,
+#aboutButton{
+    font-size:34px;
+    padding:25px;
+    width:90%;
+    max-width:500px;
+}
+
+}
+
+}
+
+
+</style>
+</head>
+
+<body>
+
+<audio id="bgm" loop>
+    rain.mp3
+</audio>
+
+<audio id="clickSound">
+    click.mp3
+</audio>
+
+<div id="titleScreen">
+
+<h1>羅生門</h1>
+
+<h2>～生きるための選択～</h2>
+
+<p style="font-size:30px;margin-top:10px;">
+所要時間：約3分
+</p>
+
+<p style="font-size:30px;text-align:center;max-width:600px;">
+
+これは芥川龍之介『羅生門』をもとにした
+ADVゲームです。
+
+</p>
+
+
+
+<button id="startButton">
+▶ はじめから
+</button>
+
+<button id="galleryButton">
+▶ END図鑑
+</button>
+
+<button id="aboutButton">
+▶ 作品について
+</button>
+
+</div>
+
+<div id="background">
+
+<div id="textbox" style="display:none;">
+
+<div id="characterArea">
+
+<img
+id="character"
+src="下人風貌改.png"
+alt="下人">
+
+</div>
+
+<div id="messageArea">
+
+<div id="speaker"></div>
+
+<div id="text"></div>
+
+<div id="choices"></div>
+
+<div id="controls">
+
+<button id="nextBtn">
+▶ 次へ
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const story = [
+
+{
+speaker:"語り",
+text:"夕暮れの羅生門。雨が降っている。"
+},
+
+{
+speaker:"語り",
+text:"京都は災害と飢饉によって荒れ果てていた。"
+},
+
+{
+speaker:"語り",
+text:"下人は主人に暇を出され、行き場を失っていた。"
+},
+
+{
+speaker:"下人",
+text:"雨は止みそうにないな……。"
+},
+
+{
+speaker:"下人",
+text:"主人にも追い出された。"
+},
+
+{
+speaker:"下人",
+text:"このままでは飢え死にだ。"
+},
+
+{
+choice:true,
+
+choices:[
+
+{
+text:"主人の家へ戻ることを考える",
+next:"bad_home"
+},
+
+{
+text:"新しい仕事を探すことを考える",
+next:"bad_job"
+},
+
+{
+text:"生きるためなら盗人になることを考える",
+next:7
+}
+
+]
+
+},
+
+{
+speaker:"下人",
+text:"どうにもならないことを、どうにかしなければならない。"
+},
+
+{
+speaker:"語り",
+text:"夜が近づいている。"
+},
+
+{
+speaker:"下人",
+text:"あそこに楼へ上るはしごがある。"
+},
+
+{
+speaker:"下人",
+text:"今夜だけでも眠れる場所が必要だ。"
+},
+
+{
+choice:true,
+
+choices:[
+
+{
+text:"上に登る",
+next:13
+},
+
+{
+text:"ここに留まる",
+next:"stay"
+}
+
+]
+
+},
+
+{
+speaker:"語り",
+text:"下人は静かにはしごを登る。"
+},
+
+{
+speaker:"下人",
+text:"誰かいるのか……？"
+},
+
+{
+speaker:"下人",
+text:"こんな場所に？"
+},
+
+{
+speaker:"語り",
+text:"ガサ……"
+},
+
+{
+speaker:"下人",
+text:"さらに近づいてみよう。"
+},
+
+{
+speaker:"語り",
+text:"楼の中には数え切れない死体が転がっていた。"
+},
+
+{
+speaker:"下人",
+text:"死体だらけだ……。"
+},
+
+{
+speaker:"下人",
+text:"あれは何をしている？"
+},
+
+{
+speaker:"語り",
+text:"老婆が死人の髪を抜いている。"
+},
+
+{
+speaker:"下人",
+text:"死人の髪を抜いているだと……！"
+},
+
+{
+speaker:"下人",
+text:"なんという悪だ！"
+},
+
+{
+choice:true,
+
+choices:[
+
+{
+text:"老婆を問い詰める",
+next:25
+},
+
+{
+text:"見逃す",
+next:"bad1"
+}
+
+]
+
+},
+
+{
+speaker:"下人",
+text:"おのれ！何をしていた！"
+},
+
+{
+speaker:"老婆",
+text:"ひっ！"
+},
+
+{
+speaker:"下人",
+text:"言え。何のために死体の髪を抜く？"
+},
+
+{
+speaker:"老婆",
+text:"その髪でかつらを作るのじゃ。"
+},
+
+{
+speaker:"下人",
+text:"それだけのために？"
+},
+
+{
+speaker:"老婆",
+text:"生きるためじゃ。"
+},
+
+{
+speaker:"老婆",
+text:"今髪を抜いた女も善人ではない。"
+},
+
+{
+speaker:"老婆",
+text:"蛇を干して魚だと偽り、人に売っていた。"
+},
+{
+speaker:"老婆",
+text:"それも、生きるためだった。"
+},
+{
+speaker:"老婆",
+text:"だからわしも、生きるために髪を抜く。"
+},
+
+{
+speaker:"下人",
+text:"……。"
+},
+
+{
+speaker:"老婆",
+text:"飢え死にせぬためには仕方なかった。"
+},
+
+{
+speaker:"老婆",
+text:"わしも同じじゃ。"
+},
+
+{
+speaker:"老婆",
+text:"生きるためじゃ。"
+},
+
+{
+speaker:"語り",
+text:"老婆の言葉が、下人の心に深く入り込む。"
+},
+
+{
+speaker:"下人",
+text:"しかし、それで悪が許されるのか……。"
+},
+
+{
+speaker:"語り",
+text:"下人はなおも迷っていた。"
+},
+
+{
+speaker:"下人",
+text:"生きるためなら……。"
+},
+
+{
+speaker:"下人",
+text:"悪も許されるのか。"
+},
+
+{
+choice:true,
+
+choices:[
+{
+text:"老婆を許す",
+next:"bad2"
+},
+{
+text:"老婆を役人へ突き出す",
+next:"bad3"
+},
+{
+text:"自分も生きるために行動する",
+next:"true1"
+}
+]
+
+}
+
+];
+
+const speaker=document.getElementById("speaker");
+const text=document.getElementById("text");
+const choices=document.getElementById("choices");
+const nextBtn=document.getElementById("nextBtn");
+const character=document.getElementById("character");
+const background=document.getElementById("background");
+
+const endingList=[
+
+"主人への未練",
+
+"甘い希望",
+
+"臆病者の末路",
+
+"正しいこと",
+
+"正義",
+
+"TRUE END"
+
+];
+
+let current=0;
+
+let endingsSeen=
+JSON.parse(
+localStorage.getItem("endingsSeen")
+) || [];
+
+let typing=false;
+
+let fullMessage="";
+let typingTimer=null;
+
+function typeText(message){
+
+    fullMessage=message;
+
+    typing=true;
+
+    text.textContent="";
+
+    let i=0;
+
+    clearInterval(typingTimer);
+
+    typingTimer=setInterval(()=>{
+
+        text.textContent += message.charAt(i);
+
+        i++;
+
+        if(i>=message.length){
+
+            clearInterval(typingTimer);
+
+            typing=false;
+
+        }
+
+    },30);
+
+}
+
+function showLine(){
+
+text.style.fontSize="";
+
+character.style.display="block";
+
+background.style.backgroundColor="";
+
+choices.innerHTML="";
+
+const line=story[current];
+
+if(current <= 12){
+
+background.style.backgroundImage='url("image.png")';
+
+}
+
+else if(current >= 13 && current <= 17){
+
+background.style.backgroundImage='url("はしご.png")';
+
+}
+
+else{
+
+background.style.backgroundImage='url("楼内.png")';
+
+}
+
+if(line.choice){
+
+showChoices(line);
+return;
+
+}
+
+speaker.textContent=line.speaker;
+typeText(line.text);
+
+if(line.speaker==="老婆"){
+
+character.style.opacity="0";
+
+setTimeout(()=>{
+
+character.style.opacity="1";
+
+},100);
+    character.src="老婆.png";
+
+}else{
+
+    character.style.opacity="1";
+
+    character.src="下人風貌改.png";
+
+}
+
+nextBtn.style.display="inline-block";
+
+}
+
+function showChoices(line){
+
+speaker.textContent="";
+
+text.innerHTML=`
+あなたの選択によって
+下人の運命が変わります。
+
+`;
+
+choices.innerHTML="";
+
+nextBtn.style.display="none";
+
+line.choices.forEach(choice=>{
+
+    const btn=document.createElement("button");
+
+    btn.className="choiceBtn";
+
+    btn.textContent=choice.text;
+
+    btn.onclick=()=>{
+
+        document.getElementById("clickSound").play();
+
+        handleChoice(choice.next);
+
+    };
+
+    choices.appendChild(btn);
+
+});
+
+}
+
+function handleChoice(next){
+
+if(next==="bad_home"){
+
+showBadEnd(
+"主人への未練",
+"主人の家へ戻ったが、追い返されてしまった。下人は雨の中で飢え死にした。"
+);
+
+return;
+
+}
+
+if(next==="bad_job"){
+
+showBadEnd(
+"甘い希望",
+"仕事を探して歩き回ったが、この世は既に荒れ果てていた。下人は力尽きた。"
+);
+
+return;
+
+}
+
+if(next==="stay"){
+
+speaker.textContent="下人";
+
+text.textContent=
+"いや、このままでは寒さに耐えられない。";
+
+choices.innerHTML="";
+
+const btn=document.createElement("button");
+
+btn.className="choiceBtn";
+
+btn.textContent="上へ登る";
+
+btn.onclick=()=>{
+
+current=13;
+showLine();
+
+};
+
+choices.appendChild(btn);
+
+return;
+
+}
+
+if(next==="bad1"){
+
+showBadEnd(
+"臆病者の末路",
+"そのまま俺は飢え死にしてしまった。"
+);
+
+return;
+
+}
+
+if(next==="bad2"){
+
+showBadEnd(
+"正しいこと",
+"だが俺はどうやって生きる？"
+);
+
+return;
+
+}
+
+if(next==="bad3"){
+
+showBadEnd(
+"正義",
+"老婆を役人に突き出したが、下人は飢え死にした。"
+);
+
+return;
+
+}
+
+if(next==="true1"){
+
+showTrueRoute();
+
+return;
+
+}
+
+current=next;
+
+showLine();
+
+}
+
+function showBadEnd(title,message){
+
+if(!endingsSeen.includes(title)){
+
+    endingsSeen.push(title);
+
+    localStorage.setItem(
+        "endingsSeen",
+        JSON.stringify(endingsSeen)
+    );
+
+}
+
+background.style.backgroundImage="none";
+background.style.backgroundColor="black";
+
+speaker.textContent=
+`BAD END : ${title}`;
+
+
+text.innerHTML=
+`<b>${title}</b><br><br>${message}`;
+
+choices.innerHTML="";
+
+nextBtn.style.display="none";
+
+const btn=document.createElement("button");
+
+btn.className="choiceBtn";
+
+btn.textContent="タイトルへ戻る";
+
+btn.onclick=()=>location.reload();
+
+choices.appendChild(btn);
+
+}
+
+function showTrueRoute(){
+
+speaker.textContent="下人";
+
+text.textContent=
+"ならば、恨むなよ。";
+
+choices.innerHTML="";
+
+nextBtn.style.display="none";
+
+const btn=document.createElement("button");
+
+btn.className="choiceBtn";
+
+btn.textContent="次へ";
+
+btn.onclick=showTrueRoute2;
+
+choices.appendChild(btn);
+
+}
+
+function showTrueRoute2(){
+
+speaker.textContent="下人";
+
+text.textContent=
+"俺も生きるためだ。";
+
+choices.innerHTML="";
+
+const btn=document.createElement("button");
+
+btn.className="choiceBtn";
+
+btn.textContent="次へ";
+
+btn.onclick=showTrueRoute3;
+
+choices.appendChild(btn);
+
+}
+
+function showTrueRoute3(){
+
+character.src="老婆.png";
+
+speaker.textContent="老婆";
+
+text.textContent=
+"な、何を……！";
+
+choices.innerHTML="";
+
+const btn=document.createElement("button");
+
+btn.className="choiceBtn";
+
+btn.textContent="次へ";
+
+btn.onclick=showTrueRoute4;
+
+choices.appendChild(btn);
+
+}
+
+function showTrueRoute4(){
+
+speaker.textContent="語り";
+
+text.textContent="ガッ！";
+
+choices.innerHTML="";
+
+const btn=document.createElement("button");
+
+btn.className="choiceBtn";
+
+btn.textContent="次へ";
+
+btn.onclick=showTrueRoute5;
+
+choices.appendChild(btn);
+
+}
+
+function showTrueRoute5(){
+
+speaker.textContent="語り";
+
+text.textContent=
+"下人は老婆の着物をはぎ取った。";
+
+choices.innerHTML="";
+
+const btn=document.createElement("button");
+
+btn.className="choiceBtn";
+
+btn.textContent="次へ";
+
+btn.onclick=showTrueRoute6;
+
+choices.appendChild(btn);
+
+}
+
+function showTrueRoute6(){
+
+speaker.textContent="下人";
+
+text.textContent=
+"飢え死にするわけにはいかない。";
+
+choices.innerHTML="";
+
+const btn=document.createElement("button");
+
+btn.className="choiceBtn";
+
+btn.textContent="エンディングへ";
+
+btn.onclick=showEnding;
+
+choices.appendChild(btn);
+
+}
+
+function showEnding(){
+
+if(!endingsSeen.includes("TRUE END")){
+
+    endingsSeen.push("TRUE END");
+
+    localStorage.setItem(
+        "endingsSeen",
+        JSON.stringify(endingsSeen)
+    );
+
+}
+
+background.style.backgroundImage='url("trueend.png")';
+
+document.getElementById("bgm").volume=1;
+
+character.style.display="none";
+
+speaker.innerHTML=
+"<span style='font-size:36px;color:#FFD700;'>TRUE END</span><br>『羅生門』";
+text.innerHTML=`
+
+<b>羅生門</b>
+
+<br><br>
+
+下人は着物を抱え、
+闇の中へ駆け去った。
+
+<br><br>
+
+かつて盗人になることを
+ためらっていた男は、
+
+生きるために悪へと
+踏み出したのである。
+
+<br><br>
+
+羅生門の下には
+ただ黒々とした夜が広がっていた。
+
+<br><br>
+
+下人は悪人になったのだろうか。
+それとも、ただ生きようとしただけなのだろうか。
+
+<br><br>
+<hr>
+
+下人の行動を、あなたはどう考えるだろうか。
+
+`;
+
+choices.innerHTML="";
+
+nextBtn.style.display="none";
+
+const q1=document.createElement("button");
+q1.className="choiceBtn";
+
+q1.textContent=
+"正しい";
+
+const q2=document.createElement("button");
+q2.className="choiceBtn";
+q2.textContent=
+"正しくない";
+
+const q3=document.createElement("button");
+q3.className="choiceBtn";
+q3.textContent=
+"判断できない";
+
+q1.onclick=()=>{
+
+localStorage.setItem(
+"playerOpinion",
+"正しい"
+);
+
+speaker.textContent="問い";
+
+text.innerHTML=`
+あなたは「正しい」を選びました。
+
+<br><br>
+
+なぜそう考えたのか、
+『羅生門』本文を根拠に説明してみよう。
+`;
+
+choices.innerHTML="";
+
+const btn=document.createElement("button");
+btn.className="choiceBtn";
+btn.textContent="もう一度遊ぶ";
+btn.onclick=()=>location.reload();
+
+choices.appendChild(btn);
+
+};
+
+
+q2.onclick=()=>{
+
+localStorage.setItem(
+"playerOpinion",
+"正しくない"
+);
+
+speaker.textContent="問い";
+
+text.innerHTML=`
+あなたは「正しくない」を選びました。
+
+<br><br>
+
+なぜそう考えたのか、
+『羅生門』本文を根拠に説明してみよう。
+`;
+
+choices.innerHTML="";
+
+const btn=document.createElement("button");
+btn.className="choiceBtn";
+btn.textContent="もう一度遊ぶ";
+btn.onclick=()=>location.reload();
+
+choices.appendChild(btn);
+
+};
+
+q3.onclick=()=>{
+
+localStorage.setItem(
+"playerOpinion",
+"判断できない"
+);
+
+speaker.textContent="問い";
+
+text.innerHTML=`
+あなたは「判断できない」を選びました。
+
+<br><br>
+
+どこが判断しにくかったのか、
+『羅生門』本文を根拠に説明してみよう。
+`;
+
+choices.innerHTML="";
+
+const btn=document.createElement("button");
+btn.className="choiceBtn";
+btn.textContent="もう一度遊ぶ";
+btn.onclick=()=>location.reload();
+
+choices.appendChild(btn);
+
+};
+
+
+choices.appendChild(q1);
+choices.appendChild(q2);
+choices.appendChild(q3);
+
+}
+
+nextBtn.addEventListener("click",()=>{
+
+if(typing){
+
+    clearInterval(typingTimer);
+
+    text.textContent=fullMessage;
+
+    typing=false;
+
+    return;
+
+}
+
+
+current++;
+
+if(current>=story.length){
+showEnding();
+return;
+}
+
+showLine();
+
+});
+
+function showGallery(){
+
+text.style.fontSize="20px";
+
+document.getElementById("textbox").style.display="flex";
+
+character.style.display="none";
+
+let html=`
+<h2>END図鑑</h2>
+<hr>
+
+<p style="color:#FFD700;">
+エンディング回収率 ${endingsSeen.length}/6
+</p>
+
+<p>
+全6種類のエンディングを回収しよう
+</p>
+
+<hr>
+
+<div style="
+display:grid;
+grid-template-columns:repeat(2,minmax(120px,1fr));
+gap:10px;
+">
+`;
+
+endingList.forEach(end=>{
+
+if(endingsSeen.includes(end)){
+
+html += `
+<div style="
+border:2px solid #FFD700;
+background:rgba(255,215,0,.15);
+padding:10px;
+text-align:center;
+border-radius:10px;
+">
+⭐<br>${end}
+</div>
+`;
+
+}else{
+
+html += `
+<div style="
+border:1px solid #666;
+padding:10px;
+text-align:center;
+">
+🔒<br>???
+</div>
+`;
+}
+
+});
+
+html += "</div>";
+
+speaker.innerHTML="";
+
+text.innerHTML=html;
+
+choices.innerHTML="";
+
+nextBtn.style.display="none";
+
+const btn=document.createElement("button");
+
+btn.className="choiceBtn";
+
+btn.textContent="タイトルへ戻る";
+
+btn.onclick=()=>location.reload();
+
+choices.appendChild(btn);
+
+}
+
+function showAbout(){
+
+text.style.fontSize="15px";
+
+document.getElementById("textbox").style.display="flex";
+
+character.style.display="none";
+
+speaker.innerHTML="";
+
+text.innerHTML=`
+
+<h2>作品について</h2>
+
+<hr>
+
+このゲームは
+芥川龍之介『羅生門』をもとにした
+選択型教材です。
+
+<br><br>
+
+下人の立場で選択することで、
+
+・心情の変化
+
+・善悪の判断
+
+・生きるための葛藤
+
+について考えることを目的としています。
+
+<br><br>
+
+ゲームクリア後は、
+ぜひ原作を読んでみてください。
+
+`;
+
+choices.innerHTML="";
+
+nextBtn.style.display="none";
+
+const btn=document.createElement("button");
+
+btn.className="choiceBtn";
+
+btn.textContent="タイトルへ戻る";
+
+btn.onclick=()=>location.reload();
+
+choices.appendChild(btn);
+
+}
+
+document.getElementById("aboutButton")
+.addEventListener("click",()=>{
+
+document.getElementById("titleScreen")
+.style.display="none";
+
+showAbout();
+
+});
+
+document.getElementById("galleryButton")
+.addEventListener("click",()=>{
+
+document.getElementById("titleScreen")
+.style.display="none";
+
+showGallery();
+
+});
+
+document.getElementById("startButton")
+.addEventListener("click",()=>{
+
+document.getElementById("textbox").style.display="flex";
+
+document.getElementById("bgm").play();
+
+background.style.backgroundImage='url("image.png")';
+
+document.getElementById("titleScreen")
+.style.display="none";
+
+showLine();
+
+});
+
+</script>
+
+</body>
+</html>
